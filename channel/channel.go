@@ -2,12 +2,16 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 )
 
 func main() {
-	forLoop()
+	// forLoop()
+	signalNotify()
 }
 
 func forLoop() {
@@ -27,4 +31,11 @@ func forLoop() {
 		wg.Done()
 	}()
 	wg.Wait()
+}
+
+func signalNotify() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+	sig := <-c
+	log.Println("catch signal", sig)
 }
