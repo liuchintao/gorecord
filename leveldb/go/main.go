@@ -12,8 +12,11 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
+	iterAndModify(db)
+}
 
-	if err = db.Put([]byte("foo"), []byte("bar"), nil); err != nil {
+func easy(db *leveldb.DB) {
+	if err := db.Put([]byte("foo"), []byte("bar"), nil); err != nil {
 		log.Fatal(err)
 	}
 	ds, err := db.Get([]byte("foo"), nil)
@@ -43,4 +46,29 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Print(prop)
+}
+
+func iterAndModify(db *leveldb.DB) {
+	data := map[string]string{
+		"hello": "world",
+		"foo":   "bar",
+		"fo0":   "bax",
+	}
+	for k, v := range data {
+		if err := db.Put([]byte(k), []byte(v), nil); err != nil {
+			log.Fatal(err)
+		}
+	}
+	iter := db.NewIterator(nil, nil)
+	for iter.Next() {
+		log.Printf("[%s]: %s", iter.Key(), iter.Value())
+		if err := db.Delete(iter.Key(), nil); err != nil {
+			log.Fatal(err)
+		}
+	}
+	log.Print("Iter again")
+	iter = db.NewIterator(nil, nil)
+	for iter.Next() {
+		log.Printf("[%s]: %s", iter.Key(), iter.Value())
+	}
 }

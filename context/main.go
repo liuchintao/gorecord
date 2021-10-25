@@ -3,15 +3,21 @@ package main
 import (
 	"context"
 	"log"
+	"sync"
 	"time"
 )
 
 func main() {
-	ctx := context.Background()
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
+	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
-		defer log.Println("hello I'm sub")
 		<-ctx.Done()
+		log.Println("hello I'm sub")
+		wg.Done()
 	}()
 	log.Print("start sleeping")
 	<-time.After(time.Second)
+	cancel()
+	wg.Wait()
 }
