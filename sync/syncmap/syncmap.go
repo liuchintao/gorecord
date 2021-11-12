@@ -20,11 +20,12 @@ func main() {
 
 	for i := range []int{1, 2, 3, 4} {
 		log.Print("working ", i)
+		x := i
 		go func() {
-			log.Print("storing ", i)
-			syncMap.Store(strconv.Itoa(i), description{
-				name: strconv.Itoa(i),
-				info: fmt.Sprintf("This is %d", i),
+			log.Print("storing ", x)
+			syncMap.Store(strconv.Itoa(x), description{
+				name: strconv.Itoa(x),
+				info: fmt.Sprintf("This is %d", x),
 			})
 			wg.Done()
 		}()
