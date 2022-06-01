@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"os/signal"
@@ -11,7 +12,8 @@ import (
 
 func main() {
 	// forLoop()
-	signalNotify()
+	// signalNotify()
+	closeChannel()
 }
 
 func forLoop() {
@@ -38,4 +40,33 @@ func signalNotify() {
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-c
 	log.Println("catch signal", sig)
+}
+
+func closeChannel() {
+	ch := make(chan struct{ name string })
+	ctx := context.Background()
+
+	go func() {
+		log.Print("input data")
+		ch <- struct{ name string }{name: "c"}
+		log.Print("try to close")
+		close(ch)
+		log.Print("closed")
+		<-ctx.Done()
+		log.Print("over")
+	}()
+
+	time.Sleep(time.Second)
+	for {
+		select {
+		case <-ctx.Done():
+			log.Print("context done")
+		case c, ok := <-ch:
+			log.Printf("%v, %v", c, ok)
+			if !ok {
+				log.Print("channel has been closed")
+				return
+			}
+		}
+	}
 }
