@@ -9,5 +9,6 @@ require (
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/spf13/viper v1.9.0
 	github.com/syncthing/notify v0.0.0-20210616190510-c6b7342338d2
-	github.com/syndtr/goleveldb v1.0.0 // indirect
+	github.com/syndtr/goleveldb v1.0.0
+	github.com/tidwall/gjson v1.14.3
 )
