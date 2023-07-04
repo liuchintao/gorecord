@@ -13,7 +13,7 @@ func main() {
 	// forLoop()
 	signalNotify()
 }
-
+// hahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhahhahahahahahahhahahahahahhah
 func forLoop() {
 	c := make(chan string)
 	wg := sync.WaitGroup{}
